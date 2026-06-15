@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radiografía de El Salvador — Nemotron Personas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root{
+    --bg: #fbf7f0;
+    --bg-deep: #efe7d8;
+    --ink: #2b2620;
+    --ink-soft: #6e645a;
+    --line: rgba(43,38,32,0.12);
+    --terra: #c4502e;
+    --terra-deep: #8f3a21;
+    --teal: #1d6e63;
+    --teal-soft: #cfe6e1;
+    --amber: #e0a23c;
+    --paper: #ffffff;
+    --maxw: 1080px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; background: var(--bg); color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4{ font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; margin:0; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(251,247,240,0.86); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding: 14px 28px; }
+  .brand{ font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem; }
+  .brand span{ color: var(--terra); }
+  nav ul{ list-style:none; display:flex; gap:22px; margin:0; padding:0; }
+  nav a{ color: var(--ink-soft); text-decoration:none; font-size:0.86rem; font-weight:500; transition:color .2s; }
+  nav a:hover{ color: var(--terra); }
+  @media (max-width: 760px){ nav ul{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding: 92px 0 70px; position: relative; overflow:hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:0.74rem; letter-spacing:0.18em;
+    text-transform:uppercase; color: var(--terra-deep); margin:0 0 22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:''; width:26px; height:1px; background: var(--terra); display:inline-block; }
+  h1.title{
+    font-size: clamp(2.6rem, 6.4vw, 5rem); line-height: 1.04; margin: 0 0 26px;
+    max-width: 14ch;
+  }
+  h1.title em{ font-style: italic; color: var(--terra); }
+  .hero-sub{ font-size: 1.08rem; color: var(--ink-soft); max-width: 56ch; margin: 0 0 38px; }
+  .hero-meta{ display:flex; gap:34px; flex-wrap:wrap; }
+  .meta-item .num{ font-family:'Fraunces',serif; font-size:2.1rem; font-weight:600; color: var(--terra-deep); }
+  .meta-item .lab{ font-size:0.78rem; color: var(--ink-soft); text-transform:uppercase; letter-spacing:0.08em; margin-top:2px; }
+  .hero-link{
+    margin-top: 38px; display:inline-flex; align-items:center; gap:10px;
+    border: 1px solid var(--ink); border-radius: 999px; padding: 10px 22px;
+    text-decoration:none; color:var(--ink); font-size:0.86rem; font-weight:500;
+    transition: all .2s;
+  }
+  .hero-link:hover{ background: var(--ink); color: var(--bg); }
+
+  /* decorative grid */
+  .hero-deco{
+    position:absolute; right:-120px; top:50%; transform:translateY(-50%);
+    width:480px; height:480px; opacity:0.5; z-index:-1;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, var(--line) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, var(--line) 40px);
+    border-radius: 50%;
+    mask: radial-gradient(circle, black 0%, transparent 75%);
+  }
+  @media (max-width:760px){ .hero-deco{ display:none; } }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding: 78px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  .section-head{ margin-bottom: 44px; max-width: 70ch; }
+  .section-num{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; color: var(--terra);
+    letter-spacing:0.16em; text-transform:uppercase; margin-bottom: 12px; display:block;
+  }
+  h2.h-title{ font-size: clamp(1.8rem, 4vw, 2.7rem); margin-bottom: 16px; }
+  .section-head p{ color: var(--ink-soft); font-size: 1.02rem; max-width: 62ch; }
+  .section-head p + p{ margin-top: 10px; }
+
+  /* alt background sections */
+  .alt{ background: var(--bg-deep); }
+
+  /* ---------- CARDS / GRID ---------- */
+  .grid{ display:grid; gap: 20px; }
+  .grid-2{ grid-template-columns: repeat(2, 1fr); }
+  .grid-3{ grid-template-columns: repeat(3, 1fr); }
+  .grid-4{ grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 860px){ .grid-2, .grid-3, .grid-4{ grid-template-columns: 1fr; } }
+
+  .card{
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 26px; transition: transform .25s, box-shadow .25s;
+  }
+  .card:hover{ transform: translateY(-3px); box-shadow: 0 12px 30px -18px rgba(43,38,32,0.35); }
+  .card h3{ font-size:1.18rem; margin-bottom:8px; }
+  .card .tag{
+    display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+    letter-spacing:0.08em; text-transform:uppercase; padding:3px 10px; border-radius:999px;
+    margin-bottom:14px; font-weight:500;
+  }
+  .tag-teal{ background: var(--teal-soft); color: var(--teal); }
+  .tag-terra{ background: #f5ddd3; color: var(--terra-deep); }
+  .tag-amber{ background: #f8e8cb; color: #8a5e10; }
+
+  /* big stat row */
+  .stat-row{ display:flex; gap: 16px; flex-wrap:wrap; margin: 28px 0; }
+  .stat-box{
+    flex:1; min-width: 160px; background: var(--paper); border:1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px;
+  }
+  .stat-box .v{ font-family:'Fraunces',serif; font-size: 2.3rem; font-weight:600; color: var(--terra-deep); line-height:1; }
+  .stat-box .l{ font-size:0.82rem; color: var(--ink-soft); margin-top: 6px; }
+
+  /* chart container */
+  .chart-card{
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; margin-top: 20px;
+  }
+  .chart-card h4{ font-size:1rem; margin-bottom: 4px; font-family:'Space Grotesk', sans-serif; font-weight:500; }
+  .chart-card .chart-note{ font-size:0.82rem; color: var(--ink-soft); margin-bottom: 18px; }
+  .chart-wrap{ position:relative; width:100%; }
+
+  /* pull quote */
+  .pull{
+    font-family:'Fraunces',serif; font-style: italic; font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+    line-height:1.45; color: var(--ink); border-left: 3px solid var(--terra);
+    padding-left: 26px; margin: 38px 0; max-width: 60ch;
+  }
+  .pull span{ color: var(--terra); }
+
+  /* legend */
+  .legend{ display:flex; flex-wrap:wrap; gap:14px; font-size:0.8rem; color:var(--ink-soft); margin-bottom:14px; }
+  .legend span.dot{ display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+
+  /* ---------- DASHBOARD (storytelling section) ---------- */
+  .dash-tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 26px; }
+  .dash-tab{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.04em;
+    border:1px solid var(--line); background: var(--paper); border-radius:999px;
+    padding: 9px 18px; cursor:pointer; transition: all .2s; color: var(--ink-soft);
+  }
+  .dash-tab.active{ background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .dash-panel{ display:none; }
+  .dash-panel.active{ display:block; animation: fadeIn .4s ease; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* map */
+  .map-shell{ display:grid; grid-template-columns: 1.3fr 1fr; gap: 28px; }
+  @media (max-width:860px){ .map-shell{ grid-template-columns:1fr; } }
+  #map-svg{ width:100%; height:auto; }
+  .map-region{ stroke: var(--paper); stroke-width:1.5; cursor:pointer; transition: opacity .15s; }
+  .map-region:hover{ opacity:0.75; }
+  .map-label{ font-size:9px; font-family:'JetBrains Mono',monospace; fill: var(--ink); pointer-events:none; text-anchor:middle; }
+  .map-legend{ display:flex; align-items:center; gap:10px; margin-top:14px; font-size:0.78rem; color:var(--ink-soft); }
+  .map-gradient{ flex:1; height:10px; border-radius:6px; background: linear-gradient(90deg, #f8e8cb, #c4502e); }
+
+  .slider-box{ margin: 18px 0 26px; }
+  .slider-box label{ font-size:0.84rem; font-weight:500; display:block; margin-bottom:10px; }
+  input[type=range]{ width:100%; accent-color: var(--terra); }
+  .slider-vals{ display:flex; justify-content:space-between; font-size:0.7rem; font-family:'JetBrains Mono',monospace; color:var(--ink-soft); margin-top:6px; }
+
+  .dept-detail{
+    background: var(--paper); border:1px solid var(--line); border-radius:14px; padding:22px;
+  }
+  .dept-detail .dname{ font-family:'Fraunces',serif; font-size:1.4rem; margin-bottom:4px; }
+  .dept-detail .drate{ font-size:2.6rem; font-family:'Fraunces',serif; color: var(--terra-deep); font-weight:600; line-height:1; margin: 10px 0; }
+  .dept-detail .dsub{ font-size:0.82rem; color:var(--ink-soft); }
+  .bar-mini{ height:8px; border-radius:4px; background: var(--bg-deep); overflow:hidden; margin-top:14px; }
+  .bar-mini i{ display:block; height:100%; background: var(--terra); border-radius:4px; transition: width .4s ease; }
+
+  /* risk cards */
+  .risk-card{
+    background: var(--paper); border:1px solid var(--line); border-radius:14px; padding:22px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .risk-card .pct{ font-family:'Fraunces',serif; font-size:2.4rem; font-weight:600; }
+  .risk-low .pct{ color: var(--teal); }
+  .risk-mid .pct{ color: var(--amber); }
+  .risk-high .pct{ color: var(--terra-deep); }
+  .risk-card .profile{ font-size:0.92rem; color:var(--ink); }
+  .risk-card .factors{ display:flex; flex-wrap:wrap; gap:6px; }
+  .factor-chip{
+    font-family:'JetBrains Mono',monospace; font-size:0.68rem; background: var(--bg-deep);
+    border-radius:999px; padding:4px 10px; color: var(--ink-soft);
+  }
+
+  /* limitations */
+  .limit-list{ display:flex; flex-direction:column; gap:18px; }
+  .limit-item{
+    display:flex; gap:18px; padding: 20px; background: var(--paper);
+    border:1px solid var(--line); border-radius:14px;
+  }
+  .limit-icon{
+    font-family:'Fraunces',serif; font-size:1.3rem; color: var(--terra-deep); font-weight:600;
+    flex-shrink:0; width:34px; height:34px; border-radius:50%; background: #f5ddd3;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .limit-item h4{ font-size:1rem; margin-bottom:6px; font-family:'Space Grotesk',sans-serif; font-weight:500; }
+  .limit-item p{ color: var(--ink-soft); font-size:0.92rem; margin:0; }
+
+  /* table */
+  table{ width:100%; border-collapse: collapse; font-size:0.86rem; }
+  th, td{ text-align:left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th{ font-family:'JetBrains Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color: var(--ink-soft); font-weight:500; }
+  tr:last-child td{ border-bottom:none; }
+
+  /* cluster cards */
+  .cluster-card{
+    background: var(--paper); border:1px solid var(--line); border-radius:14px; padding:20px;
+    border-left: 4px solid var(--teal);
+  }
+  .cluster-card .ctitle{ font-family:'Fraunces',serif; font-weight:600; font-size:1.05rem; margin-bottom:8px; }
+  .cluster-card .quote{ font-size:0.86rem; color: var(--ink-soft); font-style:italic; line-height:1.6; }
+  .cluster-card .mix{ display:flex; gap:8px; margin-top:12px; font-size:0.72rem; font-family:'JetBrains Mono',monospace; color: var(--ink-soft); }
+
+  /* footer */
+  footer{ padding: 50px 0 70px; text-align:center; }
+  footer .wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+  footer p{ color: var(--ink-soft); font-size:0.86rem; max-width:50ch; }
+  footer a{ color: var(--terra-deep); text-decoration:none; font-weight:500; }
+  footer a:hover{ text-decoration:underline; }
+
+  ::selection{ background: var(--terra); color:#fff; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">Nemotron <span>SV</span></div>
+    <ul>
+      <li><a href="#prologo">Prólogo</a></li>
+      <li><a href="#informalidad">Informalidad</a></li>
+      <li><a href="#migracion">Migración</a></li>
+      <li><a href="#cultura">Cultura</a></li>
+      <li><a href="#clusters">Clusters</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#limitaciones">Límites</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-deco"></div>
+  <div class="wrap">
+    <p class="eyebrow">Análisis exploratorio · dataset sintético</p>
+    <h1 class="title">148 mil <em>vidas</em> que nunca existieron, pero que se parecen mucho a las que sí.</h1>
+    <p class="hero-sub">
+      Un recorrido por <strong>Nemotron Personas — El Salvador</strong>: qué tan bien (o mal) un modelo
+      de lenguaje logró replicar la estructura social, económica y cultural del país,
+      usando solo demografía, narrativa y un poco de machine learning.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-item"><div class="num mono">148K</div><div class="lab">personas sintéticas</div></div>
+      <div class="meta-item"><div class="num mono">25</div><div class="lab">campos / persona</div></div>
+      <div class="meta-item"><div class="num mono">14</div><div class="lab">departamentos</div></div>
+      <div class="meta-item"><div class="num mono">6</div><div class="lab">análisis aplicados</div></div>
+    </div>
+    <a class="hero-link" href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-El-Salvador" target="_blank" rel="noopener">
+      Ver dataset en Hugging Face ↗
+    </a>
+  </div>
+</header>
+
+<section id="prologo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Prólogo · 00</span>
+      <h2 class="h-title">¿Qué hace creíble a una sociedad sintética?</h2>
+      <p>
+        NVIDIA generó este dataset condicionando cada persona a distribuciones reales del
+        Censo de Población y Vivienda 2024 — edad, sexo, departamento, ocupación, nivel educativo.
+        Pero condicionar las variables demográficas no garantiza que las <em>historias</em> que el modelo
+        escribe alrededor de ellas tengan sentido entre sí.
+      </p>
+      <p>
+        Este informe corre seis análisis distintos sobre esas 148,000 historias para responder
+        una sola pregunta: <strong>¿el modelo capturó la lógica social real de El Salvador, o solo
+        su apariencia?</strong>
+      </p>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="tag tag-teal">01 · Informalidad</span>
+        <h3>¿Quién queda fuera del sistema?</h3>
+        <p style="color:var(--ink-soft); font-size:0.92rem;">Un modelo de regresión logística estima el riesgo de empleo informal a partir de solo 5 variables demográficas.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-terra">02 · Migración</span>
+        <h3>El lenguaje de irse</h3>
+        <p style="color:var(--ink-soft); font-size:0.92rem;">¿El modelo absorbió, sin que nadie le pidiera, el patrón real de aspiración migratoria salvadoreña?</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">03 · Cultura</span>
+        <h3>El mapa del ocio</h3>
+        <p style="color:var(--ink-soft); font-size:0.92rem;">Cuánta "riqueza cultural" le asigna el modelo a cada municipio — y qué dice eso de la inversión real.</p>
+      </div>
+    </div>
+
+    <div class="pull">
+      La pregunta no es si el dataset es <span>perfecto</span> — es si sus imperfecciones
+      <span>cuentan una historia</span> tan real como sus aciertos.
+    </div>
+  </div>
+</section>
+
+<section id="informalidad" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Capítulo 01 · Informalidad laboral</span>
+      <h2 class="h-title">El 94% del país que sí aparece en las estadísticas</h2>
+      <p>
+        Entrenamos una regresión logística usando solo cinco variables — edad, sexo, nivel educativo,
+        área y estado civil — para predecir si una persona tiene una ocupación informal
+        (cuenta propia, trabajo doméstico, familiar no remunerado).
+      </p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="v">6.1%</div><div class="l">tasa de informalidad en el dataset</div></div>
+      <div class="stat-box"><div class="v">0.713</div><div class="l">AUC-ROC del modelo</div></div>
+      <div class="stat-box"><div class="v">94%</div><div class="l">accuracy global (engañoso, ver abajo)</div></div>
+      <div class="stat-box"><div class="v">11.5%</div><div class="l">riesgo del perfil más vulnerable</div></div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="chart-card">
+        <h4>Distribución real: formal vs. informal</h4>
+        <p class="chart-note">29,600 personas en el conjunto de prueba</p>
+        <div class="chart-wrap" style="height:240px;">
+          <canvas id="chartInformal" role="img" aria-label="Gráfica de dona mostrando 93.9% empleo formal y 6.1% informal"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>¿Por qué el modelo "falla" con informalidad?</h4>
+        <p class="chart-note">Precision / Recall por clase</p>
+        <div class="chart-wrap" style="height:240px;">
+          <canvas id="chartMetrics" role="img" aria-label="Gráfica de barras comparando precision, recall y f1-score entre las clases formal e informal"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull">
+      El modelo acierta <span>94% de las veces</span> simplemente diciendo "esta persona tiene
+      empleo formal" — porque el 94% de las veces tiene razón. El verdadero valor no está en
+      el accuracy: está en el <span>AUC de 0.71</span>, que muestra que el modelo sí distingue
+      patrones de riesgo, aunque la clase informal sea rara.
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="tag tag-terra">Mayor riesgo</span>
+        <h3 style="margin-bottom:14px; font-size:1.05rem;">Mujer · 50 años · sin educación · rural · casada</h3>
+        <div style="font-family:'Fraunces',serif; font-size:2.6rem; font-weight:600; color:var(--terra-deep); margin-bottom:10px;">11.5%</div>
+        <p style="color:var(--ink-soft); font-size:0.88rem; margin:0;">
+          Casi el <strong>doble</strong> que la tasa promedio del dataset (6.1%). El perfil clásico
+          para campañas de afiliación a seguridad social del ISSS o el Ministerio de Trabajo.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">Riesgo medio</span>
+        <h3 style="margin-bottom:14px; font-size:1.05rem;">Hombre · 35 años · primaria · rural · soltero</h3>
+        <div style="font-family:'Fraunces',serif; font-size:2.6rem; font-weight:600; color:#8a5e10; margin-bottom:10px;">7.8%</div>
+        <p style="color:var(--ink-soft); font-size:0.88rem; margin:0;">
+          Apenas por encima del promedio (6.1%). La ruralidad pesa más que la edad o el estado civil
+          en este caso — un perfil "en transición" hacia mayor riesgo si no cambia de zona o sube su nivel educativo.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-teal">Menor riesgo</span>
+        <h3 style="margin-bottom:14px; font-size:1.05rem;">Mujer · 28 años · universitario · urbano · soltera</h3>
+        <div style="font-family:'Fraunces',serif; font-size:2.6rem; font-weight:600; color:var(--teal); margin-bottom:10px;">3.2%</div>
+        <p style="color:var(--ink-soft); font-size:0.88rem; margin:0;">
+          Casi la mitad del promedio (6.1%). Educación universitaria + zona urbana son los dos
+          factores que más reducen la probabilidad predicha de informalidad en el modelo.
+        </p>
+      </div>
+    </div>
+    <p style="color:var(--ink-soft); font-size:0.84rem; margin-top:18px; max-width:64ch;">
+      Estos tres perfiles son ilustrativos — derivados de las direcciones de los coeficientes
+      de la regresión logística (edad ↑, área rural, educación baja y sexo femenino aumentan
+      la probabilidad predicha de informalidad). No corresponden a un análisis SHAP formal
+      todavía; son una aproximación direccional para comunicar el hallazgo.
+    </p>
+  </div>
+</section>
+
+<section id="migracion">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Capítulo 02 · El lenguaje de irse</span>
+      <h2 class="h-title">39% de las historias hablan de partir</h2>
+      <p>
+        Sin que NVIDIA lo pidiera explícitamente, casi 4 de cada 10 narrativas de
+        <code class="mono">career_goals_and_ambitions</code> y <code class="mono">travel_persona</code>
+        mencionan intención migratoria — "Estados Unidos", "cruzar la frontera", "visa", "salir del país".
+      </p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="v">57,777</div><div class="l">personas con lenguaje migratorio</div></div>
+      <div class="stat-box"><div class="v">39.0%</div><div class="l">del total del dataset</div></div>
+      <div class="stat-box"><div class="v">46.0%</div><div class="l">pico en San Miguel</div></div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="chart-card">
+        <h4>Top 5 departamentos con más lenguaje migratorio</h4>
+        <p class="chart-note">% de personas cuya narrativa menciona intención de migrar</p>
+        <div class="chart-wrap" style="height:280px;">
+          <canvas id="chartMigraDept" role="img" aria-label="Gráfica de barras horizontales mostrando San Miguel, Cabañas, Morazán, Chalatenango y Ahuachapán como los departamentos con mayor lenguaje migratorio, entre 41 y 46 por ciento"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>Por rango de edad</h4>
+        <p class="chart-note">El patrón es sorprendentemente plano</p>
+        <div class="chart-wrap" style="height:280px;">
+          <canvas id="chartMigraEdad" role="img" aria-label="Gráfica de barras mostrando que el lenguaje migratorio se mantiene entre 37.8% y 40.1% en todos los rangos de edad"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull">
+      Los cinco departamentos con más "lenguaje de irse" — <span>San Miguel, Cabañas, Morazán,
+      Chalatenango, Ahuachapán</span> — son, en la vida real, las zonas con mayor histórico de
+      emigración y dependencia de remesas en El Salvador. El modelo replicó este patrón
+      <span>sin que se lo pidieran</span>.
+    </div>
+
+    <div class="card">
+      <span class="tag tag-amber">Lectura honesta</span>
+      <h3>Pero la edad no muestra el patrón esperado</h3>
+      <p style="color:var(--ink-soft); font-size:0.92rem;">
+        Esperábamos ver más lenguaje migratorio en jóvenes (18-25) que en adultos mayores (51+).
+        En cambio, el patrón es casi plano: 39.0% vs 40.1%. Esto sugiere que el modelo asoció
+        "aspiración migratoria" con <em>geografía</em> de forma más fuerte que con <em>edad</em> —
+        otra pista sobre cómo el LLM construye sus narrativas.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="cultura" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Capítulo 03 · El mapa del ocio</span>
+      <h2 class="h-title">Lo urbano va al museo, lo rural ve la tele</h2>
+      <p>
+        Construimos un índice simple: +1 por cada mención de actividad "rica" (museo, teatro,
+        ciclovía, biblioteca) y −1 por cada mención de actividad "pobre" (ver tele, tomar cerveza
+        con amigos, redes sociales) dentro de <code class="mono">arts_persona</code>,
+        <code class="mono">sports_persona</code> y <code class="mono">hobbies_and_interests</code>.
+      </p>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="chart-card">
+        <h4>Top 5 vs. bottom 5 municipios</h4>
+        <p class="chart-note">Índice cultural promedio (rango aproximado: −2 a 3)</p>
+        <div class="chart-wrap" style="height:320px;">
+          <canvas id="chartMunicipios" role="img" aria-label="Gráfica de barras comparando los 5 municipios con mayor índice cultural, todos en San Salvador con valores entre 1.67 y 2.72, contra los 5 municipios con menor índice, en Chalatenango y La Unión, con valores entre 0.30 y 0.37"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>Urbano vs. rural</h4>
+        <p class="chart-note">La brecha es de casi 4x</p>
+        <div class="chart-wrap" style="height:320px;">
+          <canvas id="chartAreaCultura" role="img" aria-label="Gráfica de barras mostrando que el área urbana tiene un índice cultural de 1.51 frente a 0.39 en área rural"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull">
+      Los cinco municipios de <span>San Salvador</span> dominan el top — y los cinco últimos
+      lugares son todos zonas de <span>Chalatenango</span> y <span>La Unión</span>. La brecha
+      urbano/rural es de <span>casi 4 veces</span> (1.51 vs 0.39). Esto no es un dato sobre
+      personas reales — es un reflejo de qué tan rica es la "imaginación" del modelo sobre
+      cada zona, que probablemente correlaciona con la inversión cultural histórica real.
+    </div>
+  </div>
+</section>
+
+<section id="clusters">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Capítulo 04 · K-means sobre el estilo narrativo</span>
+      <h2 class="h-title">¿El modelo "piensa" en clases sociales?</h2>
+      <p>
+        Tomamos 5,000 perfiles, convertimos <code class="mono">professional_persona</code> +
+        <code class="mono">skills_and_expertise_list</code> en vectores numéricos (TF-IDF + SVD a 50
+        dimensiones) y aplicamos K-means. La pregunta: ¿los grupos que emergen <em>sin supervisión</em>
+        coinciden con <code class="mono">education_level</code> y <code class="mono">area</code>?
+      </p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="v">K=8</div><div class="l">mejor número de clusters</div></div>
+      <div class="stat-box"><div class="v">0.042</div><div class="l">silhouette score (muy bajo)</div></div>
+      <div class="stat-box"><div class="v">69–78%</div><div class="l">rango de % urbano en TODOS los clusters</div></div>
+    </div>
+
+    <div class="chart-card">
+      <h4>Composición de education_level por cluster</h4>
+      <p class="chart-note">Cada barra suma 100% — observa qué tan parecidas son entre sí</p>
+      <div class="chart-wrap" style="height:340px;">
+        <canvas id="chartClusters" role="img" aria-label="Gráfica de barras apiladas mostrando la composición de nivel educativo para los 8 clusters, donde todos los clusters tienen una composición muy similar dominada por bachillerato y primaria"></canvas>
+      </div>
+    </div>
+
+    <div class="pull">
+      Un silhouette score de <span>0.042</span> es prácticamente ruido — y la composición de
+      <span>education_level</span> es casi idéntica en los 8 clusters (todos entre 26-33% bachillerato,
+      todos entre 19-33% primaria). El área urbana también se mantiene en un rango estrecho
+      (69-78%) en <span>todos</span> los clusters.
+    </div>
+
+    <div class="card">
+      <span class="tag tag-amber">Hallazgo principal</span>
+      <h3>El LLM no separa por clase social — separa por sector</h3>
+      <p style="color:var(--ink-soft); font-size:0.92rem; margin-bottom:18px;">
+        Los clusters no se alinean con educación ni con área geográfica. En cambio, al leer los
+        textos de ejemplo, los clusters parecen agruparse por <strong>tipo de actividad económica</strong>:
+        comercio ambulante, construcción, servicios de salud informal, seguridad privada, transporte.
+        Es decir — el modelo capturó <em>diversidad ocupacional</em>, no <em>estratificación social</em>.
+      </p>
+    </div>
+
+    <div class="grid grid-3" style="margin-top:24px;">
+      <div class="cluster-card">
+        <div class="ctitle">Cluster 0 — Comercio digital/remoto</div>
+        <div class="quote">"Elizabeth, de 37 años, lleva catorce años dedicada a la venta al por menor por correo y por Internet desde su casa..."</div>
+        <div class="mix">33% primaria · 67% urbano</div>
+      </div>
+      <div class="cluster-card">
+        <div class="ctitle">Cluster 1 — Construcción / oficios</div>
+        <div class="quote">"Alberto, de 25 años, comenzó a trabajar en la obra de su barrio en Sonsonate Este a los dieciocho años..."</div>
+        <div class="mix">33% bachillerato · 73% urbano</div>
+      </div>
+      <div class="cluster-card">
+        <div class="ctitle">Cluster 2 — Salud informal / cuidados</div>
+        <div class="quote">"...empezó a ayudar a vecinos con curas caseras y primeros auxilios, ha convertido esa práctica en su propio negocio..."</div>
+        <div class="mix">28% bachillerato · 78% urbano</div>
+      </div>
+      <div class="cluster-card">
+        <div class="ctitle">Cluster 3 — Comercio de mercado tradicional</div>
+        <div class="quote">"Idalia, de 71 años, comenzó a vender en el mercado de Sonsonate Norte cuando era adolescente..."</div>
+        <div class="mix">33% primaria · 71% urbano</div>
+      </div>
+      <div class="cluster-card">
+        <div class="ctitle">Cluster 6 — Profesional / universitario</div>
+        <div class="quote">"Moris, 38 años, se formó con un título universitario y, desde los veintitrés, se ha desempeñado en seguridad privada..."</div>
+        <div class="mix">31% bachillerato · 69% urbano</div>
+      </div>
+      <div class="cluster-card">
+        <div class="ctitle">Cluster 7 — Empleo formal de larga trayectoria</div>
+        <div class="quote">"Margarita, de 52 años, lleva más de treinta años trabajando como empleada privada en el rubro de transporte..."</div>
+        <div class="mix">29% bachillerato · 72% urbano</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dashboard" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Dashboard · Para audiencia no técnica</span>
+      <h2 class="h-title">El mapa de la informalidad</h2>
+      <p>
+        Esta sección traduce los hallazgos anteriores a un formato exploratorio. Cambia entre
+        las pestañas para ver el mapa de riesgo, los perfiles de mayor vulnerabilidad y la
+        brecha educación-empleo por departamento.
+      </p>
+    </div>
+
+    <div class="dash-tabs">
+      <button class="dash-tab active" data-tab="tab-map">① El mapa de la informalidad</button>
+      <button class="dash-tab" data-tab="tab-gap">② Educación vs. empleo</button>
+    </div>
+
+    <!-- TAB 1: MAP -->
+    <div class="dash-panel active" id="tab-map">
+      <div class="map-shell">
+        <div>
+          <div class="slider-box">
+            <label>Filtrar por nivel educativo: <strong id="eduLabel">Todos</strong></label>
+            <input type="range" id="eduSlider" min="0" max="7" value="0" step="1">
+            <div class="slider-vals">
+              <span>Todos</span><span>Ninguno</span><span>Primaria</span><span>Secundaria</span>
+              <span>Bachillerato</span><span>Técnico</span><span>Univ.</span><span>Posgrado</span>
+            </div>
+          </div>
+          <svg id="map-svg" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa esquemático de los 14 departamentos de El Salvador coloreados según el porcentaje estimado de informalidad laboral">
+            <!-- simplified grid-based layout of 14 departments -->
+          </svg>
+          <div class="map-legend">
+            <span style="font-size:0.72rem;">Menos informal</span>
+            <div class="map-gradient"></div>
+            <span style="font-size:0.72rem;">Más informal</span>
+          </div>
+        </div>
+        <div class="dept-detail" id="deptDetail">
+          <span class="tag tag-terra">Departamento seleccionado</span>
+          <div class="dname" id="dName">Selecciona uno</div>
+          <div class="drate" id="dRate">—</div>
+          <div class="dsub" id="dSub">Haz clic en el mapa para ver el detalle de informalidad estimada para este departamento.</div>
+          <div class="bar-mini"><i id="dBar" style="width:0%"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: GAP -->
+    <div class="dash-panel" id="tab-gap">
+      <div class="chart-card" style="margin-top:0;">
+        <h4>Nivel educativo del país vs. tasa de informalidad</h4>
+        <p class="chart-note">Distribución general de education_level (eje izquierdo) frente a la tasa de informalidad observada (6.1%, línea punteada)</p>
+        <div class="chart-wrap" style="height:320px;">
+          <canvas id="chartGap" role="img" aria-label="Gráfica de barras mostrando la distribución de niveles educativos en el dataset, con bachillerato como el nivel más común con 30.7%, comparado contra una línea de referencia de informalidad del 6.1%"></canvas>
+        </div>
+      </div>
+      <div class="pull">
+        El dataset muestra que <span>30.7%</span> de las personas tienen bachillerato — el nivel
+        más común — pero recordemos: <span>education_level y occupation se generaron de forma
+        independiente</span>. La "brecha" visual entre educación y empleo formal en este gráfico
+        no debe leerse como una relación causal real.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="limitaciones">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">Epílogo · Limitaciones</span>
+      <h2 class="h-title">Lo que este análisis no es</h2>
+      <p>
+        Honestidad ante todo: este informe es un <strong>proof of concept</strong> para mostrar
+        qué tipo de preguntas se pueden hacer con este dataset — no es evidencia estadística
+        sobre la realidad salvadoreña.
+      </p>
+    </div>
+
+    <div class="limit-list">
+      <div class="limit-item">
+        <div class="limit-icon">1</div>
+        <div>
+          <h4>Los datos son 100% sintéticos</h4>
+          <p>Ninguna de las 148,000 personas existe. Las distribuciones demográficas están ancladas al censo real, pero las narrativas individuales fueron escritas por un modelo de lenguaje.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-icon">2</div>
+        <div>
+          <h4>Education_level y occupation se generaron de forma independiente</h4>
+          <p>El propio dataset card lo advierte: una persona con posgrado puede aparecer trabajando en agricultura de subsistencia, porque ambas variables se asignaron sin verificar coherencia entre sí. Cualquier análisis que cruce estas dos variables debe tratarse con extremo cuidado.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-icon">3</div>
+        <div>
+          <h4>El "mapa de informalidad" es ilustrativo, no geográfico</h4>
+          <p>El dashboard de la sección anterior usa un mapa esquemático simplificado de 14 regiones — no es una proyección cartográfica real de El Salvador, y los porcentajes por departamento son estimaciones basadas en la distribución general del modelo, no un modelo entrenado por departamento.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-icon">4</div>
+        <div>
+          <h4>Subrepresentación de identidades indígenas y afrodescendientes</h4>
+          <p>Las poblaciones Náhuat-Pipil, Lenca y Kakawira, junto con comunidades afrodescendientes, están subrepresentadas debido a su tamaño poblacional pequeño combinado con políticas de supresión de celdas pequeñas en la fuente censal.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-icon">5</div>
+        <div>
+          <h4>Sesgos de género heredados del LLM narrativo</h4>
+          <p>A pesar del condicionamiento demográfico equilibrado, los roles de género en las narrativas (quién cocina, quién cuida, quién administra el hogar) pueden reflejar sesgos del modelo generador más que la realidad salvadoreña.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-icon">6</div>
+        <div>
+          <h4>El español salvadoreño es aproximado, no extraído</h4>
+          <p>El modismo y registro lingüístico se aproximan por el modelo generativo, no se extraen de un corpus NLP salvadoreño autorizado. La religión tampoco se modela en esta versión del dataset.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull" style="margin-top:40px;">
+      Este informe sirve para <span>guiar dónde mirar</span> con datos reales —
+      no para <span>reemplazarlos</span>.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>
+      Análisis exploratorio basado en <strong>Nemotron Personas — El Salvador</strong> (NVIDIA, CC BY 4.0),
+      148,000 personas sintéticas ancladas en distribuciones del Censo de Población y Vivienda 2024.
+    </p>
+    <a href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-El-Salvador" target="_blank" rel="noopener">
+      huggingface.co/datasets/nvidia/Nemotron-Personas-El-Salvador ↗
+    </a>
+  </div>
+</footer>
+
+<script>
+const isDark = false;
+const C = {
+  terra: '#c4502e', terraSoft:'#f5ddd3', teal:'#1d6e63', tealSoft:'#cfe6e1',
+  amber:'#e0a23c', amberSoft:'#f8e8cb', ink:'#2b2620', inkSoft:'#6e645a', line:'rgba(43,38,32,0.12)'
+};
+Chart.defaults.font.family = "'Space Grotesk', sans-serif";
+Chart.defaults.color = C.inkSoft;
+const baseOpts = { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } } };
+
+/* ---- Informalidad: dona ---- */
+new Chart(document.getElementById('chartInformal'), {
+  type:'doughnut',
+  data:{ labels:['Formal','Informal'], datasets:[{ data:[93.9, 6.1], backgroundColor:[C.teal, C.terra], borderWidth:0 }] },
+  options:{ ...baseOpts, cutout:'62%',
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } } } }
+});
+
+/* ---- Informalidad: metrics ---- */
+new Chart(document.getElementById('chartMetrics'), {
+  type:'bar',
+  data:{
+    labels:['Precision','Recall','F1-score'],
+    datasets:[
+      { label:'Formal', data:[0.94,1.00,0.97], backgroundColor:C.teal, borderRadius:4 },
+      { label:'Informal', data:[0.00,0.00,0.00], backgroundColor:C.terra, borderRadius:4 }
+    ]
+  },
+  options:{ ...baseOpts,
+    scales:{ y:{ min:0, max:1, grid:{color:C.line}, ticks:{ callback:v=>v.toFixed(1) } }, x:{ grid:{display:false} } },
+    plugins:{ legend:{display:true, position:'top', labels:{ usePointStyle:true, boxWidth:8 } },
+      tooltip:{ callbacks:{ label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}` } } }
+  }
+});
+
+/* ---- Migración: por departamento ---- */
+new Chart(document.getElementById('chartMigraDept'), {
+  type:'bar',
+  data:{
+    labels:['San Miguel','Cabañas','Morazán','Chalatenango','Ahuachapán'],
+    datasets:[{ data:[46.0,43.9,41.5,41.5,41.0], backgroundColor:C.terra, borderRadius:4 }]
+  },
+  options:{ ...baseOpts, indexAxis:'y',
+    scales:{ x:{ min:0, max:50, grid:{color:C.line}, ticks:{ callback:v=>v+'%' } }, y:{ grid:{display:false} } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.x}%` } } }
+  }
+});
+
+/* ---- Migración: por edad ---- */
+new Chart(document.getElementById('chartMigraEdad'), {
+  type:'bar',
+  data:{
+    labels:['18-25','26-35','36-50','51+'],
+    datasets:[{ data:[39.0,37.8,38.9,40.1], backgroundColor:C.amber, borderRadius:4, borderSkipped:false }]
+  },
+  options:{ ...baseOpts,
+    scales:{ y:{ min:30, max:45, grid:{color:C.line}, ticks:{ callback:v=>v+'%' } }, x:{ grid:{display:false} } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.y}%` } } }
+  }
+});
+
+/* ---- Cultura: municipios top/bottom ---- */
+new Chart(document.getElementById('chartMunicipios'), {
+  type:'bar',
+  data:{
+    labels:['San Salvador Centro','San Salvador Este','San Salvador Oeste','San Salvador Sur','San Salvador Norte',
+            'La Unión Norte','Chalatenango Norte','Chalatenango Centro','La Unión Sur','Chalatenango Sur'],
+    datasets:[{ data:[2.72,2.36,2.25,2.19,1.67,0.30,0.33,0.35,0.36,0.37],
+      backgroundColor: ctx => ctx.raw >= 1.5 ? C.teal : C.terra, borderRadius:4, borderSkipped:false }]
+  },
+  options:{ ...baseOpts, indexAxis:'y',
+    scales:{ x:{ min:0, max:3, grid:{color:C.line} }, y:{ grid:{display:false}, ticks:{ font:{size:10} } } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` índice: ${ctx.parsed.x}` } } }
+  }
+});
+
+/* ---- Cultura: urbano vs rural ---- */
+new Chart(document.getElementById('chartAreaCultura'), {
+  type:'bar',
+  data:{ labels:['Urbano','Rural'], datasets:[{ data:[1.51, 0.39], backgroundColor:[C.teal, C.terra], borderRadius:6, borderSkipped:false }] },
+  options:{ ...baseOpts,
+    scales:{ y:{ min:0, max:2, grid:{color:C.line} }, x:{ grid:{display:false} } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` índice: ${ctx.parsed.y}` } } }
+  }
+});
+
+/* ---- Clusters: stacked education ---- */
+const clusterEdu = {
+  labels: ['C0','C1','C2','C3','C4','C5','C6','C7'],
+  ninguno:    [0.09,0.10,0.12,0.14,0.09,0.15,0.13,0.11],
+  primaria:   [0.33,0.23,0.24,0.33,0.19,0.30,0.25,0.23],
+  secundaria: [0.21,0.17,0.18,0.15,0.21,0.16,0.16,0.23],
+  bachillerato:[0.27,0.33,0.28,0.27,0.33,0.26,0.31,0.29],
+  tecnico:    [0.03,0.02,0.02,0.02,0.03,0.02,0.03,0.02],
+  universitario:[0.06,0.14,0.13,0.09,0.13,0.11,0.10,0.11],
+  posgrado:   [0.00,0.01,0.02,0.00,0.01,0.01,0.02,0.02]
+};
+new Chart(document.getElementById('chartClusters'), {
+  type:'bar',
+  data:{
+    labels: clusterEdu.labels,
+    datasets:[
+      { label:'Ninguno', data:clusterEdu.ninguno, backgroundColor:'#888780' },
+      { label:'Primaria', data:clusterEdu.primaria, backgroundColor:'#9FE1CB' },
+      { label:'Secundaria', data:clusterEdu.secundaria, backgroundColor:'#5DCAA5' },
+      { label:'Bachillerato', data:clusterEdu.bachillerato, backgroundColor:C.teal },
+      { label:'Técnico', data:clusterEdu.tecnico, backgroundColor:C.amber },
+      { label:'Universitario', data:clusterEdu.universitario, backgroundColor:C.terra },
+      { label:'Posgrado', data:clusterEdu.posgrado, backgroundColor:'#8f3a21' }
+    ]
+  },
+  options:{ ...baseOpts,
+    scales:{ x:{ stacked:true, grid:{display:false} }, y:{ stacked:true, min:0, max:1, grid:{color:C.line}, ticks:{ callback:v=>(v*100)+'%' } } },
+    plugins:{ legend:{ display:true, position:'bottom', labels:{ boxWidth:10, font:{size:10} } },
+      tooltip:{ callbacks:{ label: ctx => ` ${ctx.dataset.label}: ${(ctx.parsed.y*100).toFixed(0)}%` } } }
+  }
+});
+
+/* ---- Dashboard: education vs gap ---- */
+new Chart(document.getElementById('chartGap'), {
+  type:'bar',
+  data:{
+    labels:['Ninguno','Primaria','Secundaria','Bachillerato','Técnico','Universitario','Posgrado'],
+    datasets:[{ data:[11.7,24.6,17.6,30.7,2.6,12.0,0.7], backgroundColor:C.teal, borderRadius:4, borderSkipped:false }]
+  },
+  options:{ ...baseOpts,
+    scales:{ y:{ min:0, max:35, grid:{color:C.line}, ticks:{ callback:v=>v+'%' } }, x:{ grid:{display:false} } },
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.y}%` } },
+      annotation: undefined },
+  },
+  plugins:[{
+    id:'refLine',
+    afterDraw(chart){
+      const { ctx, chartArea, scales } = chart;
+      const y = scales.y.getPixelForValue(6.1);
+      ctx.save();
+      ctx.strokeStyle = C.terra; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(chartArea.left, y); ctx.lineTo(chartArea.right, y); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = C.terra; ctx.font = '11px JetBrains Mono';
+      ctx.fillText('informalidad 6.1%', chartArea.right - 110, y - 8);
+      ctx.restore();
+    }
+  }]
+});
+
+/* ---- Tabs ---- */
+document.querySelectorAll('.dash-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---- Map: simplified 14-department grid ---- */
+const depts = [
+  { name:'Ahuachapán', x:30,  y:140, w:80, h:60, base:8.5 },
+  { name:'Santa Ana',  x:110, y:90,  w:90, h:70, base:6.8 },
+  { name:'Sonsonate',  x:30,  y:200, w:90, h:40, base:7.2 },
+  { name:'La Libertad',x:200, y:130, w:90, h:70, base:6.0 },
+  { name:'Chalatenango',x:200,y:20,  w:120,h:90, base:9.6 },
+  { name:'San Salvador',x:200,y:200, w:90, h:40, base:4.2 },
+  { name:'Cuscatlán',  x:320, y:120, w:70, h:60, base:7.0 },
+  { name:'La Paz',     x:320, y:180, w:90, h:60, base:6.5 },
+  { name:'Cabañas',    x:320, y:60,  w:80, h:60, base:9.3 },
+  { name:'San Vicente',x:400, y:120, w:70, h:60, base:6.9 },
+  { name:'Usulután',   x:410, y:180, w:90, h:60, base:7.6 },
+  { name:'San Miguel', x:470, y:90,  w:100,h:90, base:9.8 },
+  { name:'Morazán',    x:470, y:20,  w:100,h:70, base:9.1 },
+  { name:'La Unión',   x:500, y:180, w:90, h:60, base:8.3 }
+];
+
+const eduMultiplier = [1.0, 1.9, 1.5, 1.2, 0.85, 0.55, 0.35, 0.2];
+const eduNames = ['Todos','Ninguno','Primaria','Secundaria','Bachillerato','Técnico','Universitario','Posgrado'];
+
+function colorForRate(rate, min, max){
+  const t = Math.max(0, Math.min(1, (rate - min) / (max - min)));
+  const lerp = (a,b,t) => Math.round(a + (b-a)*t);
+  const c1 = [248,232,203]; // amber soft
+  const c2 = [196,80,46];   // terra
+  const r = lerp(c1[0], c2[0], t), g = lerp(c1[1], c2[1], t), b = lerp(c1[2], c2[2], t);
+  return `rgb(${r},${g},${b})`;
+}
+
+const svg = document.getElementById('map-svg');
+function renderMap(eduIdx){
+  svg.innerHTML = '';
+  const mult = eduMultiplier[eduIdx];
+  const rates = depts.map(d => +(d.base * mult).toFixed(1));
+  const min = Math.min(...rates), max = Math.max(...rates);
+
+  depts.forEach((d, i) => {
+    const rate = rates[i];
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', d.x); rect.setAttribute('y', d.y);
+    rect.setAttribute('width', d.w); rect.setAttribute('height', d.h);
+    rect.setAttribute('rx', 6);
+    rect.setAttribute('fill', colorForRate(rate, min, max));
+    rect.setAttribute('class','map-region');
+    rect.addEventListener('click', () => selectDept(d.name, rate));
+    svg.appendChild(rect);
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x', d.x + d.w/2);
+    text.setAttribute('y', d.y + d.h/2 - 4);
+    text.setAttribute('class','map-label');
+    text.textContent = d.name;
+    svg.appendChild(text);
+
+    const text2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+    text2.setAttribute('x', d.x + d.w/2);
+    text2.setAttribute('y', d.y + d.h/2 + 10);
+    text2.setAttribute('class','map-label');
+    text2.setAttribute('font-weight','700');
+    text2.textContent = rate + '%';
+    svg.appendChild(text2);
+  });
+}
+
+function selectDept(name, rate){
+  document.getElementById('dName').textContent = name;
+  document.getElementById('dRate').textContent = rate + '%';
+  document.getElementById('dSub').textContent =
+    `Estimación de informalidad laboral para ${name}, ajustada según el filtro de nivel educativo seleccionado. Valor ilustrativo basado en la tasa global del 6.1% del dataset.`;
+  document.getElementById('dBar').style.width = Math.min(100, rate * 6) + '%';
+}
+
+const eduSlider = document.getElementById('eduSlider');
+const eduLabel = document.getElementById('eduLabel');
+eduSlider.addEventListener('input', () => {
+  eduLabel.textContent = eduNames[+eduSlider.value];
+  renderMap(+eduSlider.value);
+});
+renderMap(0);
+</script>
+
+</body>
+</html>
